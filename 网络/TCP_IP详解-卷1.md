@@ -86,6 +86,16 @@ IP是TCP/IP协议族中最为核心的协议，提供不可靠、无连接的数
 首部各个组成部分的具体含义，见 3.2 章节介绍，详解在后续章节。
 ![IP数据报格式](./image/TCP_IP详解/卷1/ch02-01-IP数据报格式.jpg)
 
+## 第17章
+
+![TCP数据报格式](./image/TCP_IP详解/卷1/ch17-TCP-protocol.jpg)
+
+## 第18章
+
+![TCP建立连接](./image/TCP_IP详解/卷1/ch18-TCP-handshake.jpg)
+
+![TCP断开连接](./image/TCP_IP详解/卷1/ch18-TCP-close-handshake.jpg)
+
 
 
 
