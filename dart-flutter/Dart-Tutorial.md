@@ -572,10 +572,295 @@ main() {
 }
 ```
 
-### 
+### Initializer list
 
+```dart
+class Person {
+  String firstName;
+  String lastName;
+
+  // 初始化列表
+  Person.fromJson1(Map<String, String> data)
+      : firstName = data['firstName'],
+        lastName = data['lastName'] {
+    print("in Person constructor 1");
+  }
+
+  // 和上面的方式有什么区别？
+  Person.fromJson2(Map<String, String> data) {
+    firstName = data['firstName'];
+    lastName = data['lastName'];
+    print("in Person constructor 2");
+  }
+}
+
+class Employee extends Person {
+  int salary;
+
+  Employee.fromJson(Map<String, String> data) : super.fromJson1(data) {
+    print('in Employee');
+  }
+}
+
+main() {
+  var data = {"firstName": "Bob", "lastName": "Zhu"};
+  var emp = new Employee.fromJson(data);
+
+  Person p = emp;
+  // 类型判断的时候，自动进行类型转换
+  if (p is Employee) {
+    p.salary = 999;
+  }
+
+}
+
+```
+
+### Redirecting constructors
+
+```dart
+class Point {
+  num x, y;
+
+  // The main constructor for this class.
+  Point(this.x, this.y);
+
+  // Delegates to the main constructor.
+  Point.alongXAxis(num x) : this(x, 0);
+}
+```
+
+### Constant constructors
+
+* static 的作用？
+* final 的作用？
+* const 的作用？
+
+```dart
+class ImmutablePoint {
+  static final ImmutablePoint origin =
+      const ImmutablePoint(0, 0);
+
+  final num x, y;
+
+  const ImmutablePoint(this.x, this.y);
+}
+```
+
+### Factory constructors
+
+构造方法前加上 'factory' 关键字，可以从缓存中获取实例，或者返回子类的实例。
+
+
+## Methods
+
+### Instance methods
+
+常规方法
+
+### Getters and setters
+
+直接使用 get 和 set 关键字，另外，get有返回值：
+
+```dart
+class Rectangle {
+  num left, top, width, height;
+
+  Rectangle(this.left, this.top, this.width, this.height);
+
+  // Define two calculated properties: right and bottom.
+  num get right => left + width;
+  set right(num value) => left = value - width;
+  num get bottom => top + height;
+  set bottom(num value) => top = value - height;
+}
+
+void main() {
+  var rect = Rectangle(3, 4, 20, 15);
+  assert(rect.left == 3);
+  rect.right = 12;
+  assert(rect.left == -8);
+}
+```
+
+### Abstract methods
+
+常规抽象方法
+
+## Abstract classes
+
+常规抽象类
+
+## Implicit interfaces
+
+* 使用 `implements` 关键字进行继承。
+* 接口的声明不需要关键字么？和普通类有什么区别？
+
+## Extending a class
+
+使用 `extends` 关键字进行继承
+
+### Overriding members
+
+使用 `@override` 进行方法的覆写
+
+### Overridable operators
+
+操作符重载？
+
+```dart
+class Vector {
+  final int x, y;
+  Vector(this.x, this.y);
+  Vector operator +(Vector v) => Vector(x + v.x, y + v.y);
+  Vector operator -(Vector v) => Vector(x - v.x, y - v.y);
+}
+
+void main() {
+  final v = Vector(2, 3);
+  final w = Vector(2, 2);
+
+  assert(v + w == Vector(4, 5));
+  assert(v - w == Vector(0, 1));
+}
+```
+
+### noSuchMethod()
+
+有默认的实现，可进行覆写。当调用的方法不存在的时候会执行。
+
+## Enumerated types
+
+枚举类
+
+### Using enums
+
+使用 `enum` 关键字
+
+```dart
+enum Color { red, green, blue }
+
+void main() {
+  // 有默认下标值
+  assert(Color.red.index == 0);
+  assert(Color.green.index == 1);
+  assert(Color.blue.index == 2);
+
+  // 可以用下标访问
+  List<Color> colors = Color.values;
+  assert(colors[2] == Color.blue);
+
+  var aColor = Color.blue;
+
+  // 可以使用switch
+  switch (aColor) {
+    case Color.red:
+      print('Red as roses!');
+      break;
+    case Color.green:
+      print('Green as grass!');
+      break;
+    default: // Without this, you see a WARNING.
+      print(aColor); // 'Color.blue'
+  }
+}
+```
+
+## Adding features to a class: mixins
+
+使用 `with` 关键字。
+
+* 没看懂，为了多继承？还是多级继承？
+
+## Class variables and methods
+
+Use the `static` keyword to implement class-wide variables and methods.
+
+### Static variables
+
+静态变量不需要类实例就可以进行调用。
+
+```dart
+class Queue {
+  static const initialCapacity = 16;
+}
+void main() {
+  assert(Queue.initialCapacity == 16);
+}
+```
+### Static methods
+
+静态方法也不需要类实例，所以不能接收 `this` 参数。
 
 # 8. Generics
+
+## Using collection literals
+
+List 和 Map 初始化范例，泛型限制放在初始化数据前面：
+
+```dart
+var names = <String>['Seth', 'Kathy', 'Lars'];
+var pages = <String, String>{
+  'index.html': 'Homepage',
+  'robots.txt': 'Hints for web robots',
+  'humans.txt': 'We are people, not machines'
+};
+```
+## Using parameterized types with constructors
+
+如果调用构造方法，那么需要将泛型限制放在类名后面：
+
+```dart
+void main() {
+  var names = List<String>();
+  names.addAll(['Seth', 'Kathy', 'Lars']);
+  var nameSet = Set<String>.from(names);
+  // The following code creates a map that has integer keys and values of type View:
+  var views = Map<int, View>();
+}
+```
+
+## Generic collections and the types they contain
+
+可以将泛型算作类型的一部分？
+
+```dart
+void main() {
+  var names = List<String>();
+  names.addAll(['Seth', 'Kathy', 'Lars']);
+  print(names is List<String>); // true
+}
+```
+
+## Restricting the parameterized type
+
+泛型范围限制，和Java类似：
+
+```dart
+class Foo<T extends SomeBaseClass> {
+  // Implementation goes here...
+  String toString() => "Instance of 'Foo<$T>'";
+}
+
+class Extender extends SomeBaseClass {
+  // ...
+}
+```
+
+## Using generic methods
+
+更多资料参考：[Using Generic Methods](https://github.com/dart-lang/sdk/blob/master/pkg/dev_compiler/doc/GENERIC_METHODS.md)
+
+```dart
+void main() {
+  T first<T>(List<T> ts) {
+    // Do some initial work or error checking, then...
+    T tmp = ts[0];
+    // Do some additional checking or processing...
+    return tmp;
+  }
+}
+```
 
 # 9. Libraries and visibility
 
