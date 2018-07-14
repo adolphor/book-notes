@@ -864,13 +864,125 @@ void main() {
 
 # 9. Libraries and visibility
 
+## Using libraries
+
+```dart
+import 'dart:html';
+import 'package:test/test.dart';
+```
+
+### Specifying a library prefix
+
+```dart
+import 'package:lib1/lib1.dart';
+import 'package:lib2/lib2.dart' as lib2;
+
+// Uses Element from lib1.
+Element element1 = Element();
+
+// Uses Element from lib2.
+lib2.Element element2 = lib2.Element();
+```
+
+### Importing only part of a library
+
+* To reduce an app’s initial startup time.
+* To perform A/B testing—trying out alternative implementations of an algorithm, for example.
+* To load rarely used functionality, such as optional screens and dialogs.
+
+
+```dart
+// Import only foo.
+import 'package:lib1/lib1.dart' show foo;
+
+// Import all names EXCEPT foo.
+import 'package:lib2/lib2.dart' hide foo;
+```
+
+### Lazily loading a library
+
+
+
+```dart
+import 'package:greetings/hello.dart' deferred as hello;
+
+Future greet() async {
+  await hello.loadLibrary();
+  hello.printGreeting();
+}
+```
+
+## Implementing libraries
+
+[Create Library Packages](https://www.dartlang.org/guides/libraries/create-library-packages)
+
+
 # 10. Asynchrony support
+
+异步操作支持，依赖 `async` 和 `await` 两个关键字。
+
+## Handling Futures
+
+To use `await`, code must be in an async function—a function marked as `async`:
+
+```dart
+await lookUpVersion();
+
+Future checkVersion() async {
+  var version = await lookUpVersion();
+  // Do something with version
+}
+```
+
+## Declaring async functions
+
+Adding the async keyword to a function makes it return a Future. 
+For example, consider this synchronous function, which returns a String:
+
+```dart
+String lookUpVersion() => '1.0.0';
+Future<String> lookUpVersion() async => '1.0.0';
+```
 
 # 11. Generators
 
+* Synchronous generator: Returns an Iterable object.
+* Asynchronous generator: Returns a Stream object.
+
+To implement a synchronous generator function, mark the function body as sync*, 
+and use yield statements to deliver values:
+
+```dart
+Iterable<int> naturalsTo(int n) sync* {
+  int k = 0;
+  while (k < n) yield k++;
+}
+
+Iterable<int> naturalsDownFrom(int n) sync* {
+  if (n > 0) {
+    yield n;
+    yield* naturalsDownFrom(n - 1);
+  }
+}
+```
+
 # 12. Callable classes
 
+# 13. Isolates
 
+# 14. Typedefs
+
+可以将一个方法定义为一个数据类型：
+
+```dart
+typedef Compare = int Function(Object a, Object b);
+
+class SortedCollection {
+  Compare compare;
+
+  SortedCollection(this.compare);
+}
+```
 
 
 
