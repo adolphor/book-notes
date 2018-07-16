@@ -632,9 +632,9 @@ class Point {
 
 ### Constant constructors
 
-* static 的作用？
-* final 的作用？
-* const 的作用？
+* const 不可修改，引用对象比如List,Map的内容也不能修改
+* final 不能使用等号重新赋值
+* static 无需对象实例，使用类名就可以调用
 
 ```dart
 class ImmutablePoint {
