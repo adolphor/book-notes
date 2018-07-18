@@ -167,7 +167,7 @@ bool isNoble(int atomicNumber) => _nobleGases[atomicNumber] != null;
 
 ### Optional named parameters
 
-可以使用变量名指定参数，需要什么参数传递什么参数就行了。
+可以使用变量名指定参数，需要什么参数传递什么参数就行了，在大括号之内的参数时可选参数。
 
 ```dart
 main(List<String> arguments) {
@@ -176,6 +176,7 @@ main(List<String> arguments) {
   enableFlags(bold: true, hidden: true);
 }
 
+// 使用带括号表示可选参数，必填参数填在大括号之外即可
 void enableFlags({bool bold, bool hidden}) {
   print("bold => " + bold.toString());
   print("hidden => " + hidden.toString());
@@ -216,6 +217,7 @@ enableFlags(bold: true);
 
 * 返回值 void
 * 有个可选参数： List<String>
+
 
 ## Functions as first-class objects
 

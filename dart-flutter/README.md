@@ -10,3 +10,4 @@
 
 ## Flutter
 * [Flutter中文网](https://flutterchina.club)
+* [medium - Flutter](https://medium.com/flutter-io)
